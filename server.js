@@ -2,12 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/posts');
 
-dotenv.config();
+dotenv.config(); // Load .env file
+
+console.log('MONGODB_URI:', process.env.MONGODB_URI); // Log to verify
 
 const app = express();
 app.use(express.json());
