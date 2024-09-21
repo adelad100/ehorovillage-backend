@@ -7,6 +7,7 @@ const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/posts');
 
 dotenv.config(); // Load .env file
+console.log('MONGO_URI from env:', process.env.MONGO_URI);
 
 console.log('MONGODB_URI:', process.env.MONGODB_URI); // Log to verify
 
@@ -27,7 +28,7 @@ mongoose
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
+app.use('/api/user', userRoutes);W
 app.use('/api/posts', postRoutes);
 
 app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
