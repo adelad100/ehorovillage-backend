@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -6,14 +7,17 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/posts');
 
-dotenv.config(); // Load .env file
-console.log('MONGO_URI from env:', process.env.MONGO_URI);
-
-console.log('MONGODB_URI:', process.env.MONGODB_URI); // Log to verify
+dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+// CORS Configuration
+app.use(cors({
+  origin: 'https://adelad100.github.io/ehorovillage-frontend/', // Replace this with your actual frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 
 const PORT = process.env.PORT || 5000;
 
