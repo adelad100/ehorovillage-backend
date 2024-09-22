@@ -14,7 +14,7 @@ app.use(express.json());
 
 // CORS Configuration
 app.use(cors({
-  origin: 'https://adelad100.github.io/ehorovillage-frontend/', // Replace this with your actual frontend URL
+  origin: 'https://adelad100.github.io/ehorovillage-frontend', // Replace this with your actual frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
