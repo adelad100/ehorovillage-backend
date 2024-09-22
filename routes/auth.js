@@ -1,42 +1,35 @@
 // routes/auth.js
 const express = require('express');
-const bcrypt = require('bcryptjs'); // Make sure you're using bcryptjs
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Ensure the path to the User model is correct
+const User = require('../models/User');
 const router = express.Router();
 
-// Register a new user
-router.post('/register', async (req, res) => {
+// Login a user
+router.post('/login', async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
 
-    // Validate the request body
-    if (!username || !email || !password) {
-      return res.status(400).json({ message: 'Please fill all fields' });
+    // Check if the user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+    // Check if the password is correct
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create a new user
-    const newUser = new User({
-      username,
-      email,
-      password: hashedPassword,
+    // Create and send a JWT token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
     });
 
-    // Save the user to the database
-    const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+    res.status(200).json({ token, user });
   } catch (error) {
-    console.error('Error registering user:', error);
+    console.error('Error logging in user:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
