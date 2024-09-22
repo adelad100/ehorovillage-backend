@@ -10,6 +10,11 @@ router.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
+    // Validate the request body
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: 'Please fill all fields' });
+    }
+
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -32,35 +37,6 @@ router.post('/register', async (req, res) => {
     res.status(201).json(savedUser);
   } catch (error) {
     console.error('Error registering user:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-// Login a user
-router.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    // Check if the user exists
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Check if the password is correct
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    // Create and send a JWT token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
-    });
-
-    res.status(200).json({ token, user });
-  } catch (error) {
-    console.error('Error logging in user:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
