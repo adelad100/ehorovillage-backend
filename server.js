@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/auth'); // Check this path
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/posts');
 
@@ -12,23 +12,9 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// CORS Configuration with Multiple Allowed Origins
-const allowedOrigins = [
-  'https://adelad100.github.io', // Main GitHub Pages URL
-  'https://adelad100.github.io/ehorovillage-frontend' // Specific subpath if needed
-];
-
+// CORS Configuration
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin, like mobile apps or curl requests
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
+  origin: 'https://adelad100.github.io',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
@@ -45,7 +31,7 @@ mongoose
   .catch((error) => console.error('MongoDB connection error:', error));
 
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes); // Ensure this is correct
 app.use('/api/user', userRoutes);
 app.use('/api/posts', postRoutes);
 

@@ -1,7 +1,8 @@
+// routes/auth.js
 const express = require('express');
-const bcrypt = require('bcryptjs'); // Use bcryptjs instead of bcrypt
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Make sure the path to the User model is correct
+const User = require('../models/User'); // Check the path to the User model
 const router = express.Router();
 
 // Register a new user
